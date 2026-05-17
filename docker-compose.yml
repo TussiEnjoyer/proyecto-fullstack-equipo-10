@@ -1,0 +1,203 @@
+services:
+  # --- 1. MÓDULO API GATEWAY ---
+  db-gateway:
+    image: mysql:8.0
+    container_name: db_gateway
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_gateway
+    ports: ["33060:3306"]
+    networks: [red_aduana]
+
+  ms-gateway:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: gateway_dev
+    ports: ["8080:8080"]
+    depends_on: [db-gateway]
+    volumes: ["./api-gateway/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 2. MÓDULO AUTH ---
+  db-auth:
+    image: mysql:8.0
+    container_name: db_auth
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_auth
+    ports: ["33061:3306"]
+    networks: [red_aduana]
+
+  ms-auth:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: auth_dev
+    ports: ["8081:8080"]
+    depends_on: [db-auth]
+    volumes: ["./auth-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 3. MÓDULO VIAJEROS ---
+  db-viajeros:
+    image: mysql:8.0
+    container_name: db_viajeros
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_viajeros
+    ports: ["33062:3306"]
+    networks: [red_aduana]
+
+  ms-viajeros:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: viajeros_dev
+    ports: ["8082:8080"]
+    depends_on: [db-viajeros]
+    volumes: ["./viajeros-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 4. MÓDULO VEHÍCULOS ---
+  db-vehiculos:
+    image: mysql:8.0
+    container_name: db_vehiculos
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_vehiculos
+    ports: ["33063:3306"]
+    networks: [red_aduana]
+
+  ms-vehiculos:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: vehiculos_dev
+    ports: ["8083:8080"]
+    depends_on: [db-vehiculos]
+    volumes: ["./vehiculos-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 5. MÓDULO EQUIPAJE (REEMPLAZO DE SAG) ---
+  db-equipaje:
+    image: mysql:8.0
+    container_name: db_equipaje
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_equipaje
+    ports: ["33064:3306"]
+    networks: [red_aduana]
+
+  ms-equipaje:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: equipaje_dev
+    ports: ["8084:8080"]
+    depends_on: [db-equipaje]
+    volumes: ["./equipaje-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 6. MÓDULO PDI MIGRACIONES ---
+  db-pdi:
+    image: mysql:8.0
+    container_name: db_pdi
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_pdi
+    ports: ["33065:3306"]
+    networks: [red_aduana]
+
+  ms-pdi:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: pdi_dev
+    ports: ["8085:8080"]
+    depends_on: [db-pdi]
+    volumes: ["./pdi-migraciones-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 7. MÓDULO INTEGRACIÓN ---
+  db-integracion:
+    image: mysql:8.0
+    container_name: db_integracion
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_integracion
+    ports: ["33066:3306"]
+    networks: [red_aduana]
+
+  ms-integracion:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: integracion_dev
+    ports: ["8086:8080"]
+    depends_on: [db-integracion]
+    volumes: ["./integracion-internacional/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 8. MÓDULO REPORTES ---
+  db-reportes:
+    image: mysql:8.0
+    container_name: db_reportes
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_reportes
+    ports: ["33067:3306"]
+    networks: [red_aduana]
+
+  ms-reportes:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: reportes_dev
+    ports: ["8087:8080"]
+    depends_on: [db-reportes]
+    volumes: ["./reportes-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 9. MÓDULO AUDITORÍA ---
+  db-auditoria:
+    image: mysql:8.0
+    container_name: db_auditoria
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_auditoria
+    ports: ["33068:3306"]
+    networks: [red_aduana]
+
+  ms-auditoria:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: auditoria_dev
+    ports: ["8088:8080"]
+    depends_on: [db-auditoria]
+    volumes: ["./auditoria-service/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+  # --- 10. MÓDULO ORQUESTADOR ---
+  db-orquestador:
+    image: mysql:8.0
+    container_name: db_orquestador
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_orquestador
+    ports: ["33069:3306"]
+    networks: [red_aduana]
+
+  ms-orquestador:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: orquestador_dev
+    ports: ["8089:8080"]
+    depends_on: [db-orquestador]
+    volumes: ["./tramites-orquestador/codigo_fuente:/app"]
+    command: tail -f /dev/null
+    networks: [red_aduana]
+    working_dir: /app
+
+networks:
+  red_aduana:
