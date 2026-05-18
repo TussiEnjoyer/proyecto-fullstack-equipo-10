@@ -3,7 +3,7 @@
 Este proyecto consiste en un ecosistema de 10 microservicios independientes e interconectados mediante una arquitectura orientada a servicios, corriendo completamente sobre contenedores aislados en Docker.
 
 ## 👥 Integrantes
-* [cite_start]Grupo de Desarrollo - Sección 003D [cite: 6]
+* Renato Soto, Joaquin orellanaGrupo de Desarrollo - Sección 003D
 
 ## 🛠️ Arquitectura y Mapeo de Puertos Oficial
 El sistema distribuye sus responsabilidades en los siguientes componentes, configurados con sus respectivas bases de datos y puertos expuestos:
