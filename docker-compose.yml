@@ -12,7 +12,7 @@ services:
   ms-gateway:
     image: maven:3.9-eclipse-temurin-21
     container_name: gateway_dev
-    ports: ["8080:8080"]
+    ports: ["8080:8080"]  # El Gateway se queda en el 8080 de punta a punta
     depends_on: [db-gateway]
     volumes: ["./api-gateway/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -32,7 +32,7 @@ services:
   ms-auth:
     image: maven:3.9-eclipse-temurin-21
     container_name: auth_dev
-    ports: ["8081:8080"]
+    ports: ["8085:8085"]  # Sincronizado al puerto 8085
     depends_on: [db-auth]
     volumes: ["./auth-service/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -52,7 +52,7 @@ services:
   ms-viajeros:
     image: maven:3.9-eclipse-temurin-21
     container_name: viajeros_dev
-    ports: ["8082:8080"]
+    ports: ["8081:8081"]  # Sincronizado al puerto 8081
     depends_on: [db-viajeros]
     volumes: ["./viajeros-service/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -72,14 +72,14 @@ services:
   ms-vehiculos:
     image: maven:3.9-eclipse-temurin-21
     container_name: vehiculos_dev
-    ports: ["8083:8080"]
+    ports: ["8082:8082"]  # Sincronizado al puerto 8082
     depends_on: [db-vehiculos]
     volumes: ["./vehiculos-service/codigo_fuente:/app"]
     command: tail -f /dev/null
     networks: [red_aduana]
     working_dir: /app
 
-  # --- 5. MÓDULO EQUIPAJE (REEMPLAZO DE SAG) ---
+  # --- 5. MÓDULO EQUIPAJE ---
   db-equipaje:
     image: mysql:8.0
     container_name: db_equipaje
@@ -92,7 +92,7 @@ services:
   ms-equipaje:
     image: maven:3.9-eclipse-temurin-21
     container_name: equipaje_dev
-    ports: ["8084:8080"]
+    ports: ["8083:8083"]  # Sincronizado al puerto 8083
     depends_on: [db-equipaje]
     volumes: ["./equipaje-service/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -112,14 +112,14 @@ services:
   ms-pdi:
     image: maven:3.9-eclipse-temurin-21
     container_name: pdi_dev
-    ports: ["8085:8080"]
+    ports: ["8086:8086"]  # Sincronizado al puerto 8086
     depends_on: [db-pdi]
     volumes: ["./pdi-migraciones-service/codigo_fuente:/app"]
     command: tail -f /dev/null
     networks: [red_aduana]
     working_dir: /app
 
-  # --- 7. MÓDULO INTEGRACIÓN ---
+  # --- 7. MÓDULO INTEGRACIÓN INTERNACIONAL ---
   db-integracion:
     image: mysql:8.0
     container_name: db_integracion
@@ -132,7 +132,7 @@ services:
   ms-integracion:
     image: maven:3.9-eclipse-temurin-21
     container_name: integracion_dev
-    ports: ["8086:8080"]
+    ports: ["8087:8087"]  # Sincronizado al puerto 8087
     depends_on: [db-integracion]
     volumes: ["./integracion-internacional/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -152,7 +152,7 @@ services:
   ms-reportes:
     image: maven:3.9-eclipse-temurin-21
     container_name: reportes_dev
-    ports: ["8087:8080"]
+    ports: ["8088:8088"]  # Sincronizado al puerto 8088
     depends_on: [db-reportes]
     volumes: ["./reportes-service/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -172,7 +172,7 @@ services:
   ms-auditoria:
     image: maven:3.9-eclipse-temurin-21
     container_name: auditoria_dev
-    ports: ["8088:8080"]
+    ports: ["8084:8084"]  # Sincronizado al puerto 8084
     depends_on: [db-auditoria]
     volumes: ["./auditoria-service/codigo_fuente:/app"]
     command: tail -f /dev/null
@@ -180,20 +180,11 @@ services:
     working_dir: /app
 
   # --- 10. MÓDULO ORQUESTADOR ---
-  db-orquestador:
-    image: mysql:8.0
-    container_name: db_orquestador
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: db_orquestador
-    ports: ["33069:3306"]
-    networks: [red_aduana]
-
+  # Se removió db-orquestador ya que el código del orquestador no usa base de datos (se comunica por Feign)
   ms-orquestador:
     image: maven:3.9-eclipse-temurin-21
     container_name: orquestador_dev
-    ports: ["8089:8080"]
-    depends_on: [db-orquestador]
+    ports: ["8089:8089"]  # Sincronizado al puerto 8089
     volumes: ["./tramites-orquestador/codigo_fuente:/app"]
     command: tail -f /dev/null
     networks: [red_aduana]
